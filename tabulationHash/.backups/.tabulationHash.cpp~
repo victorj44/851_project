@@ -1,0 +1,16 @@
+#include "tabulationHash.h"
+
+TabulationHash::TabulationHash
+{
+
+}
+
+long TabulationHash::hash(long key)
+{
+
+}
+
+long TabulationHash::hash(string key)
+{
+  
+}

@@ -1,0 +1,9 @@
+#ifndef __TABULATION_HASH__
+#define __TABULATION_HASH__
+
+class TabulationHash : public HashFunction
+{
+  
+};
+
+#endif //__TABULATION_HASH__
