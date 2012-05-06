@@ -1,0 +1,12 @@
+#makefile for hopscotch
+
+CC=g++
+CFLAGS= -g -Wall
+LDFLAGS=
+
+
+all:
+	$(CC) $(CFLAGS) -o test_hopscotch.x test_hopscotch.cpp
+
+clean:
+	rm -r -f *.o *.x */*.x */*.
