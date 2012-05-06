@@ -4,7 +4,7 @@
 
 int main()
 {
-  HashFunction *hf = new TabulationHash();
+  HashFunction *hf = new TabulationHash(123);
   
   return 0;
 }

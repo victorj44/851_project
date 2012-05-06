@@ -5,8 +5,11 @@
 
 class TabulationHash : public HashFunction
 {
+ private:
+  int size;
+  int64 T[8][1 << 8];
  public:
-  TabulationHash();
+  TabulationHash(int size);
   int64 hashInt(int64 key);
   int64 hashString(string key);
 };

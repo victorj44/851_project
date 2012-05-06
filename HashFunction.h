@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-#define int64 long
+#define int64 int64_t
 
 class HashFunction
 {
