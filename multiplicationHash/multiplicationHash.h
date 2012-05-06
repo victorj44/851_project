@@ -5,8 +5,12 @@
 
 class MultiplicationHash : public HashFunction
 {
+ private:
+  int size;
+  int64 p;
+  int64 a, b;
  public:
-  MultiplicationHash();
+  MultiplicationHash(int size);
   int64 hash(int64 key);
   int64 hash(string key);
 };
