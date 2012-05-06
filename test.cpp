@@ -2,6 +2,7 @@
 #include "HashFunction.h"
 #include "tabulationHash/tabulationHash.h"
 #include "multiplicationHash/multiplicationHash.h"
+#include "HashMapBase.h"
 #include <iostream>
 using namespace std;
 
@@ -10,6 +11,9 @@ int main()
   HashFunction *hf = new TabulationHash(200);
   HashFunction *hf2 = new MultiplicationHash(200);
 
+  //key = {string, int64}; value = <T>
+  //super not intuitive
+  HashMapBase<int> *hm;
 
   //for (int i = 0; i < 100; i++)
   //cout << i << " -> " << hf->hash(i) << endl;
