@@ -1,9 +1,23 @@
 #ifndef __TABULATION_HASH__
 #define __TABULATION_HASH__
 
+#include "../HashFunction.h"
+
 class TabulationHash : public HashFunction
 {
-  
+ private:
+  int size;
+  int64 T[8][1 << 8];
+ public:
+<<<<<<< HEAD
+  TabulationHash(int size);
+  int64 hashInt(int64 key);
+  int64 hashString(string key);
+=======
+  TabulationHash();
+  int64 hash(int64 key);
+  int64 hash(string key);
+>>>>>>> 7d2e23da7786163fae143b1b8123f527e0b98884
 };
 
 #endif //__TABULATION_HASH__

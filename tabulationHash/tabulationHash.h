@@ -9,9 +9,9 @@ class TabulationHash : public HashFunction
   int size;
   int64 T[8][1 << 8];
  public:
-  TabulationHash(int size);
-  int64 hashInt(int64 key);
-  int64 hashString(string key);
+  TabulationHash();
+  int64 hash(int64 key);
+  int64 hash(string key);
 };
 
 #endif //__TABULATION_HASH__

@@ -10,7 +10,7 @@ TabulationHash::TabulationHash(int size)
       T[i][j] = ((int64)rand() << 32) | rand();
 }
 
-int64 TabulationHash::hashInt(int64 key)
+int64 TabulationHash::hash(int64 key)
 {
   int64 ret = 0;
   for (int i = 0; i < 8; i++)
@@ -21,7 +21,7 @@ int64 TabulationHash::hashInt(int64 key)
   return ret;
 }
 
-int64 TabulationHash::hashString(string key)
+int64 TabulationHash::hash(string key)
 {
   int64 ret = 0;
   for (int i = 0; i < key.length(); i++)

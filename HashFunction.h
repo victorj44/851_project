@@ -10,8 +10,8 @@ class HashFunction
 {
  public:
   HashFunction() { }
-  virtual int64 hashInt(int64 key) = 0;
-  virtual int64 hashString(string key) = 0;
+  virtual int64 hash(int64 key) = 0;
+  virtual int64 hash(string key) = 0;
 };
 
 #endif// __HASH_FUNCTION__
