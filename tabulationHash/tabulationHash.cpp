@@ -5,12 +5,12 @@ TabulationHash::TabulationHash()
 
 }
 
-long TabulationHash::hash(long key)
+int64 TabulationHash::hashInt(int64 key)
 {
   return 0;
 }
 
-long TabulationHash::hash(string key)
+int64 TabulationHash::hashString(string key)
 {
   return 0;
 }

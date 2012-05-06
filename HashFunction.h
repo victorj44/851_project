@@ -4,12 +4,14 @@
 #include <string>
 using namespace std;
 
+#define int64 long
+
 class HashFunction
 {
  public:
   HashFunction() { }
-  virtual long hash(long key) = 0;
-  virtual long hash(string key) = 0;
+  virtual int64 hashInt(int64 key) = 0;
+  virtual int64 hashString(string key) = 0;
 };
 
 #endif// __HASH_FUNCTION__
