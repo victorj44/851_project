@@ -5,7 +5,7 @@
 
 int main()
 {
-  HashFunction *hf = new TabulationHash();
+  HashFunction *hf = new TabulationHash(123);
   HashFunction *hf2 = new MultiplicationHash();
 
   return 0;
