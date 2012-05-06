@@ -2,7 +2,7 @@
 #include <ctime>
 #include <cstdlib>
 
-TabulationHash::TabulationHash(int size)
+TabulationHash::TabulationHash(int64 size)
 {
   srand(time(NULL));
   this->size = size;
@@ -19,14 +19,14 @@ int64 TabulationHash::hash(int64 key)
       ret ^= T[i][key % (1<<8)];
       key >>= 8;
     }
-  return ret;
+  return ret % size;
 }
 
 int64 TabulationHash::hash(string key)
 {
   int64 ret = 0;
-  //for (int i = 0; i < key.length(); i++)
-    //    ret ^= 
+  for (unsigned int i = 0; i < key.length(); i++)
+    ret ^= T[i%8][(int)key[i]];
 
-  return ret;
+  return ret % size;
 }

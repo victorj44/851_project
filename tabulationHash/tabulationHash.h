@@ -6,10 +6,10 @@
 class TabulationHash : public HashFunction
 {
  private:
-  int size;
+  int64 size;
   int64 T[8][1 << 8];
  public:
-  TabulationHash(int size);
+  TabulationHash(int64 size);
   int64 hash(int64 key);
   int64 hash(string key);
 };
