@@ -7,8 +7,8 @@ class TabulationHash : public HashFunction
 {
  public:
   TabulationHash();
-  int64 hashInt(int64 key);
-  int64 hashString(string key);
+  int64 hash(int64 key);
+  int64 hash(string key);
 };
 
 #endif //__TABULATION_HASH__
