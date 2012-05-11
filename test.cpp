@@ -3,6 +3,7 @@
 #include "tabulationHash/tabulationHash.h"
 #include "multiplicationHash/multiplicationHash.h"
 #include "HashMapBase.h"
+#include "linearProbing/linearHash.h"
 #include <iostream>
 using namespace std;
 
@@ -13,7 +14,7 @@ int main()
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int> *hm;
+  HashMapBase<int> *hm = new LinearHash<int>(200, hf);
 
   //for (int i = 0; i < 100; i++)
   //cout << i << " -> " << hf->hash(i) << endl;
