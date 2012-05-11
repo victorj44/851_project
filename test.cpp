@@ -21,7 +21,7 @@ int main()
   srand(time(NULL));
   map<int64, int64> truth;
   printf("starting the test\n");
-  
+
   for (int i = 0; i < 10; i++)
     {
       int64 key = rand();
@@ -35,7 +35,7 @@ int main()
     {
       int64 key = I->first;
       int64 value = I->second;
-      
+
       int64 myvalue = 0;
       bool in = hm->get(key, myvalue);
       if (!in || myvalue != value)
@@ -44,7 +44,7 @@ int main()
 	  printf("(%lld %lld) not found; in = %d, myvalue = %lld\n", key, value, in, myvalue);
 	}
     }
-  
+
   printf("everything ok\n");
 
 
