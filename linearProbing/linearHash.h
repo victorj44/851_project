@@ -17,7 +17,7 @@ class LinearHash : public HashMapBase<T>
   {
     keys = new int64[size];
     values = new T[size];
-    memset(keys, -1, sizeof(keys));
+    memset(keys, -1, sizeof(keys) * size);
   }
   
   ~LinearHash()

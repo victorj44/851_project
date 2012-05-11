@@ -9,20 +9,21 @@
 #include <ctime>
 using namespace std;
 
+const int testSize = 1*1000*1000;
+
 int main()
 {
-  HashFunction *hf = new TabulationHash(1000);
-  HashFunction *hf2 = new MultiplicationHash(1000);
+  HashFunction *hf = new TabulationHash(testSize);
+  HashFunction *hf2 = new MultiplicationHash(testSize);
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int64> *hm = new LinearHash<int64>(1000, hf);
+  HashMapBase<int64> *hm = new LinearHash<int64>(testSize, hf);
 
   srand(time(NULL));
   map<int64, int64> truth;
   printf("starting the test\n");
-
-  for (int i = 0; i < 10; i++)
+for (int i = 0; i < 10; i++)
     {
       int64 key = rand();
       int64 value = rand();
