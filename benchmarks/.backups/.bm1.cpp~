@@ -1,0 +1,91 @@
+/* **************************************
+ * benchmark 1 - pure reads
+ * 10^6 elements in hash maps
+ * 10^8 gets per hash map
+ * - C++11 unordered_map
+ * - Boost hash_map
+ * - gcc/ext hash_map
+ * - linear hashing w/ tabulation
+ * - linear hashing w/ mult.hash.
+ * - quadr hashing w/ tabulation
+ * - quadr hashing w/ mult.hash.
+ */
+#include <cstdio>
+#include <ctime>
+#include <unordered_map>
+#include <boost/unordered_map>
+#include <ext/hash_map>
+#include "../tabulationHash/tabulationHash.h"
+#include "../multiplicationHash/multiplicationHash.h"
+#include "../linearProbing/linearHash.h"
+#include "../quadraticProbing/quadraticProbing.h"
+
+const int64 NELEM = 1000*1000;
+const int64 HMSIZE = 2*1000*1000; //hash map size; effectively load = NELEM/HMSIZE;
+const int64 NREADS = 100*1000*1000;
+
+int64 elems[NELEM]; //keys inserted
+int64 perm[NELEM]; //random permutation of those keys
+
+void testC11um()
+{
+  
+}
+
+void testBoostHm()
+{
+
+}
+
+void testGccExtHm()
+{
+  
+}
+
+void testHMB(HashMapBase<int64> *hm)
+{
+  
+}
+
+int main()
+{
+  srand(time(NULL));
+  for (int i = 0; i < NELEM; i++)
+    elems[i] = rand(); 
+  for (int i = 0; i < NELEM; i++)
+    perm[i] = elems[rand() % NELEM]; 
+
+  printf("C++11 Unordered Map:\n");
+  testC11um();
+
+  printf("Boost hash_map:\n");
+  testBoostHm();
+  
+  printf("GCC/ext hash_map:\n");
+  testGccExtHm();
+
+  HashFunction *tabh = new TabulationHash(HMSIZE);
+  HashFunction *mulh = new MultiplicationHash(HMSIZE);
+
+  printf("*** Linear with tabulation:\n");
+  HashMapBase<int64> *hm = new LinearHash<int64>(HMSIZE, tabh);
+  testHMB(hm);
+  delete hm;
+  
+  hm = new LinearHash<int64>(HMSIZE, mulh);
+  printf("*** Linear with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new QuadraticHash(HMSIZE, tabh);
+  printf("**** Quadratic with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new QuadraticHash(HMSIZE, mulh);
+  printf("**** Quadratic with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+
+  return 0;
+}

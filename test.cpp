@@ -23,7 +23,7 @@ int main()
   srand(time(NULL));
   map<int64, int64> truth;
   printf("starting the test\n");
-for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 10; i++)
     {
       int64 key = rand();
       int64 value = rand();
