@@ -7,28 +7,58 @@ template<typename T>
 class LinearHash : public HashMapBase<T>
 {
  private:
+  static const int64 EMPTY = (int64)-1;
   int64 size;
   HashFunction *hf;
-  T *table;
+  T *values;
+  int64 *keys;
  public:
  LinearHash(int64 size, HashFunction *hf) : size(size), hf(hf)
   {
-    table = new T[size]; //?
+    keys = new int64[size];
+    values = new T[size];
+    memset(keys, -1, sizeof(keys));
   }
   
   ~LinearHash()
     {
-      delete[] table;
+      delete[] values;
+      delete[] keys;
     }
   
   void put(int64 key, T value)
   {
-    
+    int64 h = hf->hash(key);
+    while (keys[h] != EMPTY && keys[h] != key)
+      {
+	h++;
+	if (h >= size)
+	  h -= size;
+      }
+    keys[h] = key;
+    values[h] = value;
   }
 
   bool get(int64 key, T &retValue)
   {
-    return false;
+    int64 h = hf->hash(key);
+    bool ret = false;
+
+    while (keys[h] != EMPTY)
+      {
+	if (keys[h] == key)
+	  {
+	    ret = true;
+	    retValue = values[h];
+	    break;
+	  }
+
+	h++;
+	if (h >= size)
+	  h -= size;
+      }
+
+    return ret;
   }
 };
 

@@ -5,39 +5,48 @@
 #include "HashMapBase.h"
 #include "linearProbing/linearHash.h"
 #include <iostream>
+#include <map>
+#include <ctime>
 using namespace std;
 
 int main()
 {
-  HashFunction *hf = new TabulationHash(200);
-  HashFunction *hf2 = new MultiplicationHash(200);
+  HashFunction *hf = new TabulationHash(1000);
+  HashFunction *hf2 = new MultiplicationHash(1000);
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int> *hm = new LinearHash<int>(200, hf);
+  HashMapBase<int64> *hm = new LinearHash<int64>(1000, hf);
 
-  //for (int i = 0; i < 100; i++)
-  //cout << i << " -> " << hf->hash(i) << endl;
-  cout << "a" << " -> " << hf->hash("a") << endl;
-  cout << "ab" << " -> " << hf->hash("ab") << endl;
-  cout << "abc" << " -> " << hf->hash("abc") << endl;
-  cout << "abcd" << " -> " << hf->hash("abcd") << endl;
-  cout << "abcde" << " -> " << hf->hash("abcde") << endl;
-  cout << "abcdef" << " -> " << hf->hash("abcdef") << endl;
-  cout << "abcdefa" << " -> " << hf->hash("abcdefa") << endl;
-  cout << "abcdefab" << " -> " << hf->hash("abcdefab") << endl;
+  srand(time(NULL));
+  map<int64, int64> truth;
+  printf("starting the test\n");
+  
+  for (int i = 0; i < 10; i++)
+    {
+      int64 key = rand();
+      int64 value = rand();
+      truth[key] = value;
+      hm->put(key, value);
+    }
 
-  for (int i = 0; i < 100; i++)
-    cout << i << " -> " << hf->hash(i) << endl;
+  printf("reading the values\n");
+  for (map<int64, int64>::iterator I = truth.begin(); I != truth.end(); I++)
+    {
+      int64 key = I->first;
+      int64 value = I->second;
+      
+      int64 myvalue = 0;
+      bool in = hm->get(key, myvalue);
+      if (!in || myvalue != value)
+	{
+	  printf("!!! ERROR\n");
+	  printf("(%lld %lld) not found; in = %d, myvalue = %lld\n", key, value, in, myvalue);
+	}
+    }
+  
+  printf("everything ok\n");
 
-  cout << "a" << " -> " << hf2->hash("a") << endl;
-  cout << "ab" << " -> " << hf2->hash("ab") << endl;
-  cout << "abc" << " -> " << hf2->hash("abc") << endl;
-  cout << "abcd" << " -> " << hf2->hash("abcd") << endl;
-  cout << "abcde" << " -> " << hf2->hash("abcde") << endl;
-  cout << "abcdef" << " -> " << hf2->hash("abcdef") << endl;
-  cout << "abcdefa" << " -> " << hf2->hash("abcdefa") << endl;
-  cout << "abcdefab" << " -> " << hf2->hash("abcdefab") << endl;
 
   return 0;
 }
