@@ -5,6 +5,11 @@ MultiplicationHash::MultiplicationHash(int size)
   srand(time(NULL));
   this->size = size;
   this->p = 2305843009213693951ULL;
+  this->initRandom();
+}
+
+void MultiplicationHash::initRandom()
+{
   this->a = (((int64)rand() << 32) | rand()) % (p-1) + 1; // guaranteed to be > 0 and < p
   this->b = (((int64)rand() << 32) | rand()) % p;
 }

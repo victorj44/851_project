@@ -11,6 +11,7 @@ class HashFunction
  public:
   HashFunction() { }
   virtual int64 hash(int64 key) = 0;
+  virtual void initRandom() = 0;
   // virtual int64 hash(string key) = 0;
 };
 

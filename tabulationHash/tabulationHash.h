@@ -12,6 +12,7 @@ class TabulationHash : public HashFunction
   TabulationHash(int64 size);
   int64 hash(int64 key);
   int64 hash(string key);
+  void initRandom();
 };
 
 #endif //__TABULATION_HASH__

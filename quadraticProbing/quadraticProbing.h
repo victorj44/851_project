@@ -18,7 +18,7 @@ class QuadraticProbing : public HashMapBase<T>
   T* values;
 
  public:
-  QuadraticProbing(int size, HashFunction *hf): size(size), hf(hf)
+  QuadraticProbing(int64 size, HashFunction *hf): size(size), hf(hf)
   {
     values = new T[size];
     keys = new int64[size];
@@ -54,7 +54,6 @@ class QuadraticProbing : public HashMapBase<T>
       ++i;
     }
     if (keys[idx] == EMPTY) {
-      retValue = T();
       return false;
     }
     retValue = values[idx];

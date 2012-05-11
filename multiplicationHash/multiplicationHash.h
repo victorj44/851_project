@@ -13,6 +13,7 @@ class MultiplicationHash : public HashFunction
   MultiplicationHash(int size);
   int64 hash(int64 key);
   int64 hash(string key);
+  void initRandom();
 };
 
 #endif //__MULTIPLICATION_HASH__
