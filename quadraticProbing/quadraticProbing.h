@@ -36,7 +36,7 @@ class QuadraticProbing : public HashMapBase<T>
     int64 idx = h;
     int i = 1;
     while (keys[idx] != EMPTY && keys[idx] != key) {
-      idx = h + (i/2) + (i*i/2) + (i & 1 == 0 ? 0 : 1); // if i is odd, add one because of rounding down
+      idx = (h + (i/2) + (i*i/2) + ((i & 1) == 0 ? 0 : 1)) % size; // if i is odd, add one because of rounding down
       ++i;
     }
     keys[idx] = key;
@@ -50,7 +50,7 @@ class QuadraticProbing : public HashMapBase<T>
     int64 idx = h;
     int i = 1;
     while (keys[idx] != EMPTY && keys[idx] != key) {
-      idx = h + (i/2) + (i*i/2) + (i & 1 == 0 ? 0 : 1); // if i is odd, add one because of rounding down
+      idx = (h + (i/2) + (i*i/2) + ((i & 1) == 0 ? 0 : 1)) % size; // if i is odd, add one because of rounding down
       ++i;
     }
     if (keys[idx] == EMPTY) {
