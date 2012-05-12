@@ -16,7 +16,6 @@ class QuadraticProbing : public HashMapBase<T>
   HashFunction *hf;
   int64* keys;
   T* values;
-  int64 nprobes;
 
  public:
   QuadraticProbing(int64 size, HashFunction *hf): size(size), hf(hf)
@@ -24,7 +23,6 @@ class QuadraticProbing : public HashMapBase<T>
     values = new T[size];
     keys = new int64[size];
     memset(keys, -1, size * sizeof(int64));
-    nprobes = 0;
   }
 
   ~QuadraticProbing()
@@ -37,11 +35,9 @@ class QuadraticProbing : public HashMapBase<T>
     int64 h = this->hf->hash(key);
     int64 idx = h;
     int i = 1;
-    nprobes++;
     while (keys[idx] != EMPTY && keys[idx] != key) {
       idx = (h + (i/2) + (i*i/2) + ((i & 1) == 0 ? 0 : 1)) % size; // if i is odd, add one because of rounding down
       ++i;
-      nprobes++;
     }
     keys[idx] = key;
     values[idx] = value;
@@ -53,11 +49,9 @@ class QuadraticProbing : public HashMapBase<T>
     int64 h = this->hf->hash(key);
     int64 idx = h;
     int i = 1;
-    nprobes++;
     while (keys[idx] != EMPTY && keys[idx] != key) {
       idx = (h + (i/2) + (i*i/2) + ((i & 1) == 0 ? 0 : 1)) % size; // if i is odd, add one because of rounding down
       ++i;
-      nprobes++;
     }
     if (keys[idx] == EMPTY) {
       return false;
@@ -66,8 +60,6 @@ class QuadraticProbing : public HashMapBase<T>
     return true;
   }
   // bool get(string key, T &retValue);
-  
-  int64 getnprobes() { return nprobes; }
 };
 
 #endif // __QUADRATIC_PROBING__

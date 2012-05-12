@@ -12,12 +12,14 @@ class LinearHash : public HashMapBase<T>
   HashFunction *hf;
   T *values;
   int64 *keys;
+  int64 nprobes;
  public:
  LinearHash(int64 size, HashFunction *hf) : size(size), hf(hf)
   {
     keys = new int64[size];
     values = new T[size];
     memset(keys, -1, sizeof(keys) * size);
+    nprobes = 0;
   }
   
   ~LinearHash()
@@ -29,8 +31,10 @@ class LinearHash : public HashMapBase<T>
   void put(int64 key, T value)
   {
     int64 h = hf->hash(key);
+    nprobes++;
     while (keys[h] != EMPTY && keys[h] != key)
       {
+	nprobes++;
 	h++;
 	if (h >= size)
 	  h -= size;
@@ -44,8 +48,10 @@ class LinearHash : public HashMapBase<T>
     int64 h = hf->hash(key);
     bool ret = false;
 
+    nprobes++;
     while (keys[h] != EMPTY)
       {
+	nprobes++;
 	if (keys[h] == key)
 	  {
 	    ret = true;
@@ -60,6 +66,8 @@ class LinearHash : public HashMapBase<T>
 
     return ret;
   }
+  
+  int64 getnprobes() { return nprobes; }
 };
 
 #endif //__LINEAR_PROBING_HASH__
