@@ -19,6 +19,8 @@ class CuckooHashing : public HashMapBase<T>
   T **newValues;
   int64 **newKeys;
 
+  int64 nprobes;
+
  public:
  CuckooHashing(int64 size, HashFunction **hf, int d): size(size), d(d), hf(hf)
  {
@@ -36,6 +38,7 @@ class CuckooHashing : public HashMapBase<T>
       newKeys[i] = new int64[size];
       memset(newKeys[i], -1, size * sizeof(newKeys[i]));
     }
+    nprobes = 0;
   }
   
   ~CuckooHashing()
@@ -67,6 +70,7 @@ class CuckooHashing : public HashMapBase<T>
     int maxLoop = LOOP_PER_TABLE * d;
     int i = 0;
     while (maxLoop > 0) {
+      ++nprobes;
       int64 h = hf[i]->hash(key);
       if (keysDest[i][h] == EMPTY || keysDest[i][h] == key) {
         keysDest[i][h] = key;
@@ -85,6 +89,7 @@ class CuckooHashing : public HashMapBase<T>
   bool get(int64 key, T &retValue)
   {
     for (int i = 0; i < d; ++i) {
+      ++nprobes;
       int64 h = hf[i]->hash(key);
       if (keys[i][h] == EMPTY) return false;
       if (keys[i][h] == key) {
@@ -93,6 +98,10 @@ class CuckooHashing : public HashMapBase<T>
       }
     }
     return false;
+  }
+
+  int64 getnprobes() {
+    return nprobes;
   }
 
   void rehash(bool first)
