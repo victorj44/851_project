@@ -2,6 +2,7 @@
 #define __HASH_MAP_BASE__
 
 #include "HashFunction.h"
+#include <cstring>
 
 template<typename T>
 class HashMapBase
