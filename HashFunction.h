@@ -2,9 +2,10 @@
 #define __HASH_FUNCTION__
 
 #include <string>
+#include <cstdlib>
 using namespace std;
 
-#define int64 uint64_t
+#define int64 unsigned long long
 
 class HashFunction
 {
