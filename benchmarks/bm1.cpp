@@ -21,6 +21,7 @@
 #include "../multiplicationHash/multiplicationHash.h"
 #include "../linearProbing/linearHash.h"
 #include "../quadraticProbing/quadraticProbing.h"
+#include "../cuckooHashing/cuckooHashing.h"
 
 const int64 NELEM = 1000*1000;
 const int64 HMSIZE = 2*1000*1000; //hash map size; effectively load = NELEM/HMSIZE;
@@ -163,5 +164,41 @@ int main()
   testHMB(hm);
   delete hm;
 
+  int d = 2; // The number of Cuckoo tables
+  HashFunction **tabhArr = new HashFunction*[d];
+  HashFunction **mulhArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    tabhArr[i] = new TabulationHash(HMSIZE);
+    mulhArr[i] = new MultiplicationHash(HMSIZE);
+  }
+
+  hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
+  printf("***** Cuckoo with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
+  printf("***** Cuckoo with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+
+  /*HashFunction **tabhSmallArr = new HashFunction*[d];
+  HashFunction **mulhSmallArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    tabhSmallArr[i] = new TabulationHash(HMSIZE / d);
+    mulhSmallArr[i] = new MultiplicationHash(HMSIZE / d);
+  }
+
+
+  hm = new CuckooHashing<int64>(HMSIZE / d, tabhSmallArr, d);
+  printf("***** Cuckoo with small table and tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new CuckooHashing<int64>(HMSIZE / d, mulhSmallArr, d);
+  printf("***** Cuckoo with small table and multiplication:\n");
+  testHMB(hm);
+  delete hm;
+  */
   return 0;
 }
