@@ -18,6 +18,7 @@
 #include "../multiplicationHash/multiplicationHash.h"
 #include "../linearProbing/linearHash.h"
 #include "../quadraticProbing/quadraticProbing.h"
+#include "../cuckooHashing/cuckooHashing.h"
 
 const int64 NELEM = 1000*1000;
 const int64 BUCKETSIZE = 1000;
@@ -99,6 +100,24 @@ int main()
 
   hm = new QuadraticProbing<int64>(HMSIZE, mulh);
   printf("**** Quadratic with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+
+  int d = 2; // The number of Cuckoo tables
+  HashFunction **tabhArr = new HashFunction*[d];
+  HashFunction **mulhArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    tabhArr[i] = new TabulationHash(HMSIZE);
+    mulhArr[i] = new MultiplicationHash(HMSIZE);
+  }
+
+  hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
+  printf("***** Cuckoo with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
+  printf("***** Cuckoo with multiplication:\n");
   testHMB(hm);
   delete hm;
 
