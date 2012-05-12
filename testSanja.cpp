@@ -5,7 +5,7 @@
 #include "HashMapBase.h"
 #include "linearProbing/linearHash.h"
 #include "quadraticProbing/quadraticProbing.h"
-//#include "cuckooHashing/cuckooHashing.h"
+#include "cuckooHashing/cuckooHashing.h"
 #include <iostream>
 #include <map>
 #include <ctime>
@@ -20,8 +20,13 @@ int main()
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int64> *hm = new QuadraticProbing<int64>(testSize, hf);
-  //HashMapBase<int64> *hm2 = new CuckooHashing<int64>(testSize, hf);
+
+  int d = 2;
+  HashFunction **hfArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    hfArr[i] = new TabulationHash(testSize);
+  }
+  HashMapBase<int64> *hm = new CuckooHashing<int64>(testSize, hfArr, d);
 
   srand(time(NULL));
   map<int64, int64> truth;
