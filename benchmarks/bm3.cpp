@@ -1,5 +1,5 @@
 /* **************************************
- * benchmark 2 - # of probes for reads, depending on the load
+ * benchmark 2 - reads running time vs. load
  * 10^6 elements in hash maps
  * 10^8 gets per hash map
  * - linear hashing w/ tabulation
@@ -20,9 +20,9 @@
 #include "../quadraticProbing/quadraticProbing.h"
 
 const int64 NELEM = 1000*1000;
-const int64 BUCKETSIZE = 1000;
+const int64 BUCKETSIZE = 10000;
 const int64 HMSIZE = NELEM; // must be >= NELEM
-const int64 NREADS = 1;//*1000*1000;
+const int64 NREADS = 100;//each time frame ~ 1M reads
 
 int64 elems[NELEM]; //keys inserted
 int64 perm[NELEM]; //random permutation of those keys
@@ -52,17 +52,20 @@ void testHMB(HashMapBase<int64> *hm)
       for (int i = 0; i < sz; i++)
 	perm[i] = elems[rand() % sz];
 
-      //do BUCKETSIZE reads
-      int64 nprobes = hm->getnprobes();
-      double ncalls = 0;
-      for (int i = 0; i < BUCKETSIZE; i++)
+      gettimeofday(&before, NULL);
+      //do NREADS * BUCKETSIZE reads
+      for (int j = 0; j < NREADS; j++)
 	{
-	  hm->get(perm[i], value);
-	  ncalls++;
+	  double ncalls = 0;
+	  for (int i = 0; i < BUCKETSIZE; i++)
+	    {
+	      hm->get(perm[i], value);
+	      ncalls++;
+	    }
 	}
-      //avg. number of probes per get
-      if (round % 10 == 1)
-	printf("%lf\n", (hm->getnprobes() - nprobes) / ncalls);
+      gettimeofday(&after, NULL);
+
+      printf("%lf\n", timediff(before, after));
     }
 
   
