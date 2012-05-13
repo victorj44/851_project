@@ -1,0 +1,178 @@
+C++11 Unordered Map:
+0.197455 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --c11':
+
+     747.586484  task-clock-msecs         #      0.999 CPUs
+              4  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          15996  page-faults              #      0.021 M/sec
+     1992711433  cycles                   #   2665.526 M/sec
+     1503727554  instructions             #      0.755 IPC
+       12724971  cache-references         #     17.021 M/sec
+        6140664  cache-misses             #      8.214 M/sec
+
+    0.748588386  seconds time elapsed
+
+*******************************************************************************
+
+GCC/ext hash_map:
+0.215139 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --gcc':
+
+     830.686044  task-clock-msecs         #      0.999 CPUs
+              4  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          18089  page-faults              #      0.022 M/sec
+     2214186888  cycles                   #   2665.492 M/sec
+     1704723298  instructions             #      0.770 IPC
+       12619933  cache-references         #     15.192 M/sec
+        6626049  cache-misses             #      7.977 M/sec
+
+    0.831374080  seconds time elapsed
+
+********************************************************************************
+
+*** Linear with tabulation:
+0.130939 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --lt':
+
+     344.099147  task-clock-msecs         #      0.999 CPUs
+              3  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          11992  page-faults              #      0.035 M/sec
+      917177939  cycles                   #   2665.447 M/sec
+      624480777  instructions             #      0.681 IPC
+        7410693  cache-references         #     21.537 M/sec
+        3965001  cache-misses             #     11.523 M/sec
+
+    0.344555502  seconds time elapsed
+
+********************************************************************************
+
+*** Linear with multiplication:
+0.103071 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --lm':
+
+     253.899141  task-clock-msecs         #      0.998 CPUs
+              2  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          11994  page-faults              #      0.047 M/sec
+      676724670  cycles                   #   2665.329 M/sec
+      381160616  instructions             #      0.563 IPC
+        7389695  cache-references         #     29.105 M/sec
+        3970716  cache-misses             #     15.639 M/sec
+
+    0.254360404  seconds time elapsed
+
+*********************************************************************************
+
+**** Quadratic with tabulation:
+0.141739 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --qt':
+
+     364.298778  task-clock-msecs         #      0.999 CPUs
+              3  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          11992  page-faults              #      0.033 M/sec
+      971025814  cycles                   #   2665.465 M/sec
+      647497656  instructions             #      0.667 IPC
+        8331045  cache-references         #     22.869 M/sec
+        4319822  cache-misses             #     11.858 M/sec
+
+    0.364762203  seconds time elapsed
+
+*********************************************************************************
+
+**** Quadratic with multiplication:
+0.112635 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --qm':
+
+     271.772849  task-clock-msecs         #      0.996 CPUs
+              3  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          11994  page-faults              #      0.044 M/sec
+      724359784  cycles                   #   2665.313 M/sec
+      404215948  instructions             #      0.558 IPC
+        8072838  cache-references         #     29.704 M/sec
+        4322676  cache-misses             #     15.905 M/sec
+
+    0.272742531  seconds time elapsed
+
+*********************************************************************************
+
+***** Cuckoo with tabulation:
+0.162500 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --ct':
+
+    1354.556938  task-clock-msecs         #      0.999 CPUs
+              5  context-switches         #      0.000 M/sec
+              1  CPU-migrations           #      0.000 M/sec
+          32983  page-faults              #      0.024 M/sec
+     3610465764  cycles                   #   2665.422 M/sec
+     4225419034  instructions             #      1.170 IPC
+       13884722  cache-references         #     10.250 M/sec
+        9738235  cache-misses             #      7.189 M/sec
+
+    1.355668175  seconds time elapsed
+
+*********************************************************************************
+
+***** Cuckoo with tabulation (different run):
+0.162073 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --ct':
+
+    9893.986125  task-clock-msecs         #      1.000 CPUs
+             14  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          32546  page-faults              #      0.003 M/sec
+    26372639517  cycles                   #   2665.522 M/sec
+    25208073578  instructions             #      0.956 IPC
+      100266439  cache-references         #     10.134 M/sec
+       48915831  cache-misses             #      4.944 M/sec
+
+    9.897775090  seconds time elapsed
+
+********************************************************************************
+
+***** Cuckoo with multiplication:
+0.136020 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --cm':
+
+    7860.783138  task-clock-msecs         #      0.999 CPUs
+             12  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          32896  page-faults              #      0.004 M/sec
+    20953373481  cycles                   #   2665.558 M/sec
+    16447516571  instructions             #      0.785 IPC
+       75709611  cache-references         #      9.631 M/sec
+       33615530  cache-misses             #      4.276 M/sec
+
+    7.864848500  seconds time elapsed
+
+*********************************************************************************
+
+***** Cuckoo with multiplication: (different run)
+0.136153 sec
+
+ Performance counter stats for 'benchmarks/bm1_individual --cm':
+
+    1493.296357  task-clock-msecs         #      0.999 CPUs
+              5  context-switches         #      0.000 M/sec
+              0  CPU-migrations           #      0.000 M/sec
+          31986  page-faults              #      0.021 M/sec
+     3980401179  cycles                   #   2665.513 M/sec
+     3706325461  instructions             #      0.931 IPC
+       20614292  cache-references         #     13.805 M/sec
+       12961707  cache-misses             #      8.680 M/sec
+
+    1.494190681  seconds time elapsed
+
