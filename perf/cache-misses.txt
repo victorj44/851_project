@@ -1,0 +1,56 @@
+# Samples: 816
+#
+# Overhead      Command        Shared Object  Symbol
+# ........  ...........  ...................  ......
+#
+    26.96%          bm1  ./benchmarks/bm1     [.] CuckooHashing<unsigned long long>::putSpecific(unsigned long long, unsigned long long, unsigned long long**, unsigned long long**)
+    20.96%          bm1  ./benchmarks/bm1     [.] CuckooHashing<unsigned long long>::rehash(bool)
+     5.76%          bm1  [kernel]             [k] clear_page_c
+     5.76%          bm1  /lib/libc-2.11.3.so  [.] malloc_consolidate
+     4.04%          bm1  ./benchmarks/bm1     [.] TabulationHash::hash(unsigned long long)
+     3.92%          bm1  ./benchmarks/bm1     [.] QuadraticProbing<unsigned long long>::get(unsigned long long, unsigned long long&)
+     3.68%          bm1  ./benchmarks/bm1     [.] testHMB(HashMapBase<unsigned long long>*)
+     3.43%          bm1  ./benchmarks/bm1     [.] CuckooHashing<unsigned long long>::get(unsigned long long, unsigned long long&)
+     2.94%          bm1  ./benchmarks/bm1     [.] LinearHash<unsigned long long>::get(unsigned long long, unsigned long long&)
+     2.70%          bm1  ./benchmarks/bm1     [.] QuadraticProbing<unsigned long long>::put(unsigned long long, unsigned long long)
+     2.21%          bm1  ./benchmarks/bm1     [.] LinearHash<unsigned long long>::put(unsigned long long, unsigned long long)
+     2.08%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hashtable<std::pair<int const, long long>, int, __gnu_cxx::hash<int>, std::_Select1st<std::pair<int const, long long> >, std::equal_to<int>, std::allocator<long long> >::find_or_insert(std::pair<int const, long long> const&)
+     1.72%          bm1  [kernel]             [k] _spin_lock
+     1.59%          bm1  ./benchmarks/bm1     [.] std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true>::_M_find_node(std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false>*, unsigned long long const&, unsigned long) const
+     1.35%          bm1  ./benchmarks/bm1     [.] MultiplicationHash::hash(unsigned long long)
+     1.10%          bm1  ./benchmarks/bm1     [.] std::equal_to<int>::operator()(int const&, int const&) const
+     0.86%          bm1  [kernel]             [k] get_page_from_freelist
+     0.86%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hash<int>::operator()(int) const
+     0.74%          bm1  ./benchmarks/bm1     [.] std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true>::_M_get_Value_allocator() const
+     0.61%          bm1  ./benchmarks/bm1     [.] std::tr1::hash<unsigned long long>::operator()(unsigned long long) const
+     0.61%          bm1  ./benchmarks/bm1     [.] std::tr1::__detail::_Map_base<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, true, std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true> >::operator[](unsigned long long const&)
+     0.61%          bm1  ./benchmarks/bm1     [.] std::equal_to<unsigned long long>::operator()(unsigned long long const&, unsigned long long const&) const
+     0.49%          bm1  ./benchmarks/bm1     [.] std::tr1::__detail::_Hash_code_base<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, false>::_M_compare(unsigned long long const&, unsigned long, std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false>*) const
+     0.49%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hashtable<std::pair<int const, long long>, int, __gnu_cxx::hash<int>, std::_Select1st<std::pair<int const, long long> >, std::equal_to<int>, std::allocator<long long> >::_M_bkt_num_key(int const&, unsigned long) const
+     0.37%          bm1  /lib/libc-2.11.3.so  [.] _int_free
+     0.37%          bm1  /lib/libc-2.11.3.so  [.] __GI___libc_free
+     0.37%          bm1  ./benchmarks/bm1     [.] std::tr1::__detail::_Mod_range_hashing::operator()(unsigned long, unsigned long) const
+     0.37%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hashtable<std::pair<int const, long long>, int, __gnu_cxx::hash<int>, std::_Select1st<std::pair<int const, long long> >, std::equal_to<int>, std::allocator<long long> >::_M_delete_node(__gnu_cxx::_Hashtable_node<std::pair<int const, long long> >*)
+     0.37%          bm1  ./benchmarks/bm1     [.] CuckooHashing<unsigned long long>::put(unsigned long long, unsigned long long)
+     0.25%          bm1  [kernel]             [k] __rmqueue
+     0.25%          bm1  ./benchmarks/bm1     [.] std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true>::_M_deallocate_nodes(std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false>**, unsigned long)
+     0.25%          bm1  ./benchmarks/bm1     [.] std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true>::_M_rehash(unsigned long)
+     0.25%          bm1  ./benchmarks/bm1     [.] std::allocator<std::pair<int const, long long> >::allocator<__gnu_cxx::_Hashtable_node<std::pair<int const, long long> > >(std::allocator<__gnu_cxx::_Hashtable_node<std::pair<int const, long long> > > const&)
+     0.12%          bm1  [kernel]             [k] try_to_wake_up
+     0.12%          bm1  [kernel]             [k] free_pages_check
+     0.12%          bm1  [kernel]             [k] release_pages
+     0.12%          bm1  [kernel]             [k] unmap_vmas
+     0.12%          bm1  ./benchmarks/bm1     [.] testC11um()
+     0.12%          bm1  ./benchmarks/bm1     [.] testGccExtHm()
+     0.12%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hash_map<int, long long, __gnu_cxx::hash<int>, std::equal_to<int>, std::allocator<long long> >::operator[](int const&)
+     0.12%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hashtable<std::pair<int const, long long>, int, __gnu_cxx::hash<int>, std::_Select1st<std::pair<int const, long long> >, std::equal_to<int>, std::allocator<long long> >::clear()
+     0.12%          bm1  ./benchmarks/bm1     [.] std::_Select1st<std::pair<unsigned long long const, unsigned long long> >::operator()(std::pair<unsigned long long const, unsigned long long> const&) const
+     0.12%          bm1  ./benchmarks/bm1     [.] std::tr1::_Hashtable<unsigned long long, std::pair<unsigned long long const, unsigned long long>, std::allocator<std::pair<unsigned long long const, unsigned long long> >, std::_Select1st<std::pair<unsigned long long const, unsigned long long> >, std::equal_to<unsigned long long>, std::tr1::hash<unsigned long long>, std::tr1::__detail::_Mod_range_hashing, std::tr1::__detail::_Default_ranged_hash, std::tr1::__detail::_Prime_rehash_policy, false, false, true>::_M_deallocate_node(std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false>*)
+     0.12%          bm1  ./benchmarks/bm1     [.] std::vector<__gnu_cxx::_Hashtable_node<std::pair<int const, long long> >*, std::allocator<__gnu_cxx::_Hashtable_node<std::pair<int const, long long> >*> >::operator[](unsigned long)
+     0.12%          bm1  ./benchmarks/bm1     [.] std::_Select1st<std::pair<int const, long long> >::operator()(std::pair<int const, long long> const&) const
+     0.12%          bm1  ./benchmarks/bm1     [.] __gnu_cxx::hashtable<std::pair<int const, long long>, int, __gnu_cxx::hash<int>, std::_Select1st<std::pair<int const, long long> >, std::equal_to<int>, std::allocator<long long> >::get_allocator() const
+     0.12%          bm1  ./benchmarks/bm1     [.] std::allocator<std::pair<unsigned long long const, unsigned long long> >::allocator<std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false> >(std::allocator<std::tr1::__detail::_Hash_node<std::pair<unsigned long long const, unsigned long long>, false> > const&)
+#
+# (For a higher level overview, try: perf report --sort comm,dso)
+#
+
