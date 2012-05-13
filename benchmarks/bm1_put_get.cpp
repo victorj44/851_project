@@ -14,7 +14,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <ctime>
-#include <cstring>
 #include <tr1/unordered_map>
 //#include <boost/unordered_map.hpp>
 #include <ext/hash_map>
@@ -42,12 +41,13 @@ void testC11um()
   std::tr1::unordered_map<int64, int64> hm;
 
   struct timeval before, after;
+
   //start timer;
   gettimeofday(&before, NULL);
 
   for (int i = 0; i < NELEM; i++)
     hm[elems[i]] = 10; //we don't care about the value
-
+  
   int value = 123;
   int ncalls = 0;
   for (int i = 0; i < NREADS; i++)
@@ -76,12 +76,13 @@ void testGccExtHm()
   __gnu_cxx::hash_map<int, long long> hm;
 
   struct timeval before, after;
+
   //start timer;
   gettimeofday(&before, NULL);
 
   for (int i = 0; i < NELEM; i++)
     hm[elems[i]] = (int64)10; //we don't care about the value
-
+    
   int value = 123;
   int ncalls = 0;
   for (int i = 0; i < NREADS; i++)
@@ -100,6 +101,7 @@ void testHMB(HashMapBase<int64> *hm)
 {
 
   struct timeval before, after;
+
   //start timer;
   gettimeofday(&before, NULL);
 
@@ -122,7 +124,7 @@ void testHMB(HashMapBase<int64> *hm)
   printf("%lf sec\n", timediff(before, after));  
 }
 
-int main(int argc, char *argv[])
+int main()
 {
   printf("***** MAKE SURE IT'S COMPILED WITH -O2!\n");
   srand(time(NULL));
@@ -130,89 +132,55 @@ int main(int argc, char *argv[])
     elems[i] = rand(); 
   for (int i = 0; i < NELEM; i++)
     perm[i] = elems[rand() % NELEM]; 
-  
-  if (argc == 1) {
-    printf("No argumenst specified!\n");
-    return 0;
-  }
 
-  if (strcmp(argv[1], "--c11") == 0) {
-    printf("C++11 Unordered Map:\n");
-    testC11um();
-    return 0;
-  }
+  printf("C++11 Unordered Map:\n");
+  testC11um();
 
-  if (strcmp(argv[1], "--boost") == 0) {
-    printf("Boost hash_map:\n");
-    testBoostHm();
-    return 0;
-  }
+  printf("Boost hash_map:\n");
+  testBoostHm();
   
-  if (strcmp(argv[1], "--gcc") == 0) {
-    printf("GCC/ext hash_map:\n");
-    testGccExtHm();
-    return 0;
-  }
+  printf("GCC/ext hash_map:\n");
+  testGccExtHm();
 
   HashFunction *tabh = new TabulationHash(HMSIZE);
   HashFunction *mulh = new MultiplicationHash(HMSIZE);
-  HashMapBase<int64> *hm;
 
-  if (strcmp(argv[1], "--lt") == 0) { 
-    printf("*** Linear with tabulation:\n");
-    hm = new LinearHash<int64>(HMSIZE, tabh);
-    testHMB(hm);
-    return 0;
-  }
+  printf("*** Linear with tabulation:\n");
+  HashMapBase<int64> *hm = new LinearHash<int64>(HMSIZE, tabh);
+  testHMB(hm);
+  delete hm;
+  
+  hm = new LinearHash<int64>(HMSIZE, mulh);
+  printf("*** Linear with multiplication:\n");
+  testHMB(hm);
+  delete hm;
 
-  if (strcmp(argv[1], "--lm") == 0) {
-    hm = new LinearHash<int64>(HMSIZE, mulh);
-    printf("*** Linear with multiplication:\n");
-    testHMB(hm);
-    return 0;
-  }
+  hm = new QuadraticProbing<int64>(HMSIZE, tabh);
+  printf("**** Quadratic with tabulation:\n");
+  testHMB(hm);
+  delete hm;
 
-  if (strcmp(argv[1], "--qt") == 0) {
-    hm = new QuadraticProbing<int64>(HMSIZE, tabh);
-    printf("**** Quadratic with tabulation:\n");
-    testHMB(hm);
-    return 0;
-  }
+  hm = new QuadraticProbing<int64>(HMSIZE, mulh);
+  printf("**** Quadratic with multiplication:\n");
+  testHMB(hm);
+  delete hm;
 
-  if (strcmp(argv[1], "--qm") == 0) {
-    hm = new QuadraticProbing<int64>(HMSIZE, mulh);
-    printf("**** Quadratic with multiplication:\n");
-    testHMB(hm);
-  }
-
-  int d;
-  if (argc == 3) {
-    d = atoi(argv[2]);
-  } else {
-    d = 2;
-  }
-
+  int d = 4; // The number of Cuckoo tables
   HashFunction **tabhArr = new HashFunction*[d];
   HashFunction **mulhArr = new HashFunction*[d];
-
   for (int i = 0; i < d; ++i) {
     tabhArr[i] = new TabulationHash(HMSIZE);
     mulhArr[i] = new MultiplicationHash(HMSIZE);
   }
 
+  hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
+  printf("***** Cuckoo with tabulation:\n");
+  testHMB(hm);
+  delete hm;
 
-  if (strcmp(argv[1], "--ct") == 0) {    
-    hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
-    printf("***** Cuckoo with tabulation:\n");
-    testHMB(hm);
-  }
-
-  if (strcmp(argv[1], "--cm") == 0) {
-    hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
-    printf("***** Cuckoo with multiplication:\n");
-    testHMB(hm);
-  }
-
+  hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
+  printf("***** Cuckoo with multiplication:\n");
+  testHMB(hm);
   delete hm;
 
   /*HashFunction **tabhSmallArr = new HashFunction*[d];

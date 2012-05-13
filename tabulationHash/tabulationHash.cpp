@@ -4,13 +4,13 @@
 
 TabulationHash::TabulationHash(int64 size)
 {
+  srand(time(NULL));
   this->size = size;
   this->initRandom();
 }
 
 void TabulationHash::initRandom()
 {
-  srand(time(NULL));
   for (int i = 0; i < 8; i++)
     for (int j = 0; j < (1<<8); j++)
       T[i][j] = ((int64)rand() << 32) | rand();
