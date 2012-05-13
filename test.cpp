@@ -4,6 +4,7 @@
 #include "multiplicationHash/multiplicationHash.h"
 #include "HashMapBase.h"
 #include "linearProbing/linearHash.h"
+#include "hopscotch/hopscotch.h"
 #include <iostream>
 #include <map>
 #include <ctime>
@@ -18,7 +19,7 @@ int main()
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int64> *hm = new LinearHash<int64>(testSize, hf);
+  HashMapBase<int64> *hm = new HopscotchHash<int64>(80, hf);
 
   srand(time(NULL));
   map<int64, int64> truth;

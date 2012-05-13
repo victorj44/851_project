@@ -5,7 +5,8 @@
 #include <cstdlib>
 using namespace std;
 
-#define int64 unsigned long long
+typedef unsigned long long int64;
+typedef unsigned int int32;
 
 class HashFunction
 {
