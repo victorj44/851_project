@@ -10,7 +10,7 @@
 #include <ctime>
 using namespace std;
 
-const int testSize = 1*1000*1000;
+const int testSize = 80;
 
 int main()
 {
@@ -19,14 +19,14 @@ int main()
 
   //key = {string, int64}; value = <T>
   //super not intuitive
-  HashMapBase<int64> *hm = new HopscotchHash<int64>(80, hf);
+  HashMapBase<int64> *hm = new HopscotchHash<int64>(testSize, hf);
 
   srand(time(NULL));
   map<int64, int64> truth;
   printf("starting the test\n");
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 70; i++)
     {
-      int64 key = rand();
+      int64 key = i + 1; //rand();
       int64 value = rand();
       truth[key] = value;
       hm->put(key, value);

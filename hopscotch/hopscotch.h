@@ -16,7 +16,7 @@ class HopscotchHash : public HashMapBase<T>
   int32 *used;
   int64 nprobes;
 
-  inline bool getBit(int64 pos, int shift) { return (used[pos] >> shift) & 1; }
+  inline bool getBit(int64 pos, int shift) { return (used[pos] >> shift) & 1;}
   inline void setBit(int64 pos, int shift) { used[pos] |= 1 << shift; }
   inline void unsetBit(int64 pos, int shift) { used[pos] &= ~(1 << shift); }
 
@@ -34,18 +34,18 @@ class HopscotchHash : public HashMapBase<T>
 
 	for (int64 i = 0; i < MAXH && !done; i++)
 	  {
-	    int64 tmphash = hf->hash(keys[curpos + i]);
+	    int64 tmphash = hf->hash(keys[(curpos + i)%size]);
 	    //keys[curpos + i] hashed somewhere between [curpos + 1, curpos + H]
 	    //curpos + H is empty, so swap these two and mark the appropriate pointers
 	    //does everything here have to be mod size? !! make sure it's correct !!
 	    if (tmphash >= curpos)
 	      {
-		keys[curpos + MAXH] = keys[curpos + i];
-		values[curpos + MAXH] = values[curpos + i];
-		keys[curpos + i] = EMPTY;
+		keys[ (curpos + MAXH)%size ] = keys[ (curpos + i)%size ];
+		values[ (curpos + MAXH)%size ] = values[ (curpos + i)%size ];
+		keys[ (curpos + i)%size ] = EMPTY;
 
 		unsetBit(tmphash, curpos + i - tmphash);
-		setBit(tmphash, curpos + MAXH);
+		setBit(tmphash, curpos + MAXH - tmphash);
 
 		dist -= MAXH - i;
 
@@ -89,14 +89,14 @@ class HopscotchHash : public HashMapBase<T>
       {
 	freepos++;
 	dist++;
-	if (freepos == h)
+	if (dist >= size)
 	  break;
 	if (freepos >= size)
 	  freepos -= size;
       }
 
     //table full, can't put anything in
-    if (freepos == h && keys[freepos] != EMPTY)
+    if (dist >= size)
       {
 	printf("FULL!\n");
 	return;
