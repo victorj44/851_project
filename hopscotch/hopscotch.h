@@ -104,10 +104,11 @@ class HopscotchHash : public HashMapBase<T>
 
     if (dist >= MAXH)
       freepos = reshuffle(h, dist);
-    
+
     keys[freepos] = key;
     values[freepos] = value;
     setBit(h, freepos - h); //hm... this needs to be mod size?
+    printf("put key = %lld, hash %lld, freepos %lld\n", key, h, freepos);
   }
 
   bool get(int64 key, T &retValue)
