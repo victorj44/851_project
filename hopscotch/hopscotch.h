@@ -40,14 +40,14 @@ class HopscotchHash : public HashMapBase<T>
 	    //does everything here have to be mod size? !! make sure it's correct !!
 	    if (tmphash >= curpos)
 	      {
-		keys[ (curpos + MAXH)%size ] = keys[ (curpos + i)%size ];
-		values[ (curpos + MAXH)%size ] = values[ (curpos + i)%size ];
+		keys[ (curpos + MAXH - 1)%size ] = keys[ (curpos + i)%size ];
+		values[ (curpos + MAXH - 1)%size ] = values[ (curpos + i)%size ];
 		keys[ (curpos + i)%size ] = EMPTY;
 
-		unsetBit(tmphash, curpos + i - tmphash);
-		setBit(tmphash, curpos + MAXH - tmphash);
+		//unsetBit(tmphash, curpos + i - tmphash);
+		//setBit(tmphash, curpos + MAXH - tmphash);
 
-		dist -= MAXH - i;
+		dist -= MAXH - i + 1;
 
 		done = true;
 	      }
@@ -107,7 +107,10 @@ class HopscotchHash : public HashMapBase<T>
 
     keys[freepos] = key;
     values[freepos] = value;
-    setBit(h, freepos - h); //hm... this needs to be mod size?
+    //if (h > freepos)
+    //setBit(h, size + freepos - h);
+    //else
+    //setBit(h, freepos - h); //hm... this needs to be mod size?
     printf("put key = %lld, hash %lld, freepos %lld\n", key, h, freepos);
   }
 
