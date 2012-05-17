@@ -58,11 +58,12 @@ class CuckooHashing : public HashMapBase<T>
     delete[] newKeys;
   }
 
-  void put(int64 key, T value)
+  bool put(int64 key, T value)
   {
     while (!putSpecific(key, value, this->keys, this->values)) {
       rehash(true); // if we are in a cycle, rehash and try again
     }
+    return true;
   }
 
   bool putSpecific(int64 key, T value, int64 **keysDest, T **valuesDest)

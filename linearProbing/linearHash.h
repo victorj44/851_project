@@ -28,7 +28,7 @@ class LinearHash : public HashMapBase<T>
       delete[] keys;
     }
   
-  void put(int64 key, T value)
+  bool put(int64 key, T value)
   {
     int64 h = hf->hash(key);
     nprobes++;
@@ -41,6 +41,7 @@ class LinearHash : public HashMapBase<T>
       }
     keys[h] = key;
     values[h] = value;
+    return true;
   }
 
   bool get(int64 key, T &retValue)

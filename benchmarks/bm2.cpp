@@ -19,6 +19,7 @@
 #include "../linearProbing/linearHash.h"
 #include "../quadraticProbing/quadraticProbing.h"
 #include "../cuckooHashing/cuckooHashing.h"
+#include "../hopscotch/hopscotch.h"
 
 const int64 NELEM = 1000*1000;
 const int64 BUCKETSIZE = 1000;
@@ -47,7 +48,11 @@ void testHMB(HashMapBase<int64> *hm)
     {
       int sz = BUCKETSIZE * round;
       for (int i = 0; i < BUCKETSIZE; i++)
-	hm->put(elems[sz - i - 1], value);
+	if (hm->put(elems[sz - i - 1], value) == false)
+	  {
+	    printf("x\n");
+	    return;
+	  }
 
       //random permutate reads
       for (int i = 0; i < sz; i++)
@@ -103,7 +108,17 @@ int main()
   testHMB(hm);
   delete hm;
 
-  int d = 2; // The number of Cuckoo tables
+  hm = new HopscotchHash<int64>(HMSIZE, tabh);
+  printf("***** HopscotchHash with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new HopscotchHash<int64>(HMSIZE, mulh);
+  printf("**** HopscotchHash with multiplication\n");
+  testHMB(hm);
+  delete hm;
+
+  /*int d = 2; // The number of Cuckoo tables
   HashFunction **tabhArr = new HashFunction*[d];
   HashFunction **mulhArr = new HashFunction*[d];
   for (int i = 0; i < d; ++i) {
@@ -119,7 +134,7 @@ int main()
   hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
   printf("***** Cuckoo with multiplication:\n");
   testHMB(hm);
-  delete hm;
+  delete hm;*/
 
   return 0;
 }

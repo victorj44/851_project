@@ -31,7 +31,7 @@ class HopscotchHash : public HashMapBase<T>
 	int64 curpos = inith + dist - MAXH + 1;
 	bool done = false;
 
-	for (int64 i = 0; i < MAXH && !done; i++)
+	for (int64 i = 0; i < MAXH - 1 && !done; i++)
 	  {
 	    int64 tmphash = hf->hash(keys[(curpos + i)%size]);
 	    //keys[curpos + i] hashed somewhere between [curpos + 1, curpos + H]
@@ -43,10 +43,11 @@ class HopscotchHash : public HashMapBase<T>
 		values[ (curpos + MAXH - 1)%size ] = values[ (curpos + i)%size ];
 		keys[ (curpos + i)%size ] = EMPTY;
 
-		//unsetBit(tmphash, curpos + i - tmphash);
-		//setBit(tmphash, curpos + MAXH - tmphash);
-
 		dist -= MAXH - i - 1;
+		if (MAXH - i - 1 == 0)
+		  {
+		    printf("!!!!!!!!! NOT MOVING\n");
+		  }
 
 		done = true;
 	      }
@@ -55,8 +56,7 @@ class HopscotchHash : public HashMapBase<T>
 	//this should not happen unless the table is entirely full
 	if (!done)
 	  {
-	    printf("ERROR! failed to find an element to move\n");
-	    return 0;
+	    return EMPTY;
 	  }
       }
     return (inith + dist)%size;
@@ -77,13 +77,16 @@ class HopscotchHash : public HashMapBase<T>
       delete[] values;
     }
   
-  void put(int64 key, T value)
+  //returns false if fails to insert
+  bool put(int64 key, T value)
   {
+    nprobes++;
     int64 h = hf->hash(key);
     int64 freepos = h;
     int64 dist = 0;
     while (keys[freepos] != EMPTY)
       {
+	nprobes++;
 	freepos++;
 	dist++;
 	if (dist >= size)
@@ -95,16 +98,22 @@ class HopscotchHash : public HashMapBase<T>
     //table full, can't put anything in
     if (dist >= size)
       {
-	printf("FULL!\n");
-	return;
+	//printf("FULL!\n");
+	return false;
       }
 
     if (dist >= MAXH)
       freepos = reshuffle(h, dist);
 
+    if (freepos >= size)
+      {
+	return false;
+      }
+
     keys[freepos] = key;
     values[freepos] = value;
-    printf("key = %llu, h = %llu, fp = %llu \t", key, h, freepos);
+    //printf("key = %llu, h = %llu, fp = %llu \t", key, h, freepos);
+    return true;
   }
 
   bool get(int64 key, T &retValue)
@@ -113,6 +122,7 @@ class HopscotchHash : public HashMapBase<T>
     int64 h = hf->hash(key);
     for (int64 i = 0; i < MAXH; i++)
       {
+	nprobes++;
 	if (keys[h] == key)
 	  {
 	    retValue = values[h];

@@ -33,7 +33,7 @@ class QuadraticProbing : public HashMapBase<T>
     delete[] keys;
   }
 
-  void put(int64 key, T value) {
+  bool put(int64 key, T value) {
     int64 h = this->hf->hash(key);
     int64 idx = h;
     int i = 1;
@@ -45,6 +45,7 @@ class QuadraticProbing : public HashMapBase<T>
     }
     keys[idx] = key;
     values[idx] = value;
+    return true;
   }
 
   // void put(string key, T value);

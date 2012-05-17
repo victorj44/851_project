@@ -22,6 +22,7 @@
 #include "../linearProbing/linearHash.h"
 #include "../quadraticProbing/quadraticProbing.h"
 #include "../cuckooHashing/cuckooHashing.h"
+#include "../hopscotch/hopscotch.h"
 
 const int64 NELEM = 1000*1000;
 const int64 HMSIZE = 2*1000*1000; //hash map size; effectively load = NELEM/HMSIZE;
@@ -161,6 +162,16 @@ int main()
 
   hm = new QuadraticProbing<int64>(HMSIZE, mulh);
   printf("**** Quadratic with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new HopscotchHash<int64>(HMSIZE, tabh);
+  printf("***** HopscotchHash with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new HopscotchHash<int64>(HMSIZE, mulh);
+  printf("**** HopscotchHash with multiplication\n");
   testHMB(hm);
   delete hm;
 
