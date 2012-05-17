@@ -104,6 +104,8 @@ class CuckooHashing : public HashMapBase<T>
     return nprobes;
   }
 
+  void print() { }
+
   void rehash(bool first)
   {
     bool stop = false;
