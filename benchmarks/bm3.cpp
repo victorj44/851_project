@@ -75,7 +75,7 @@ void testHMB(HashMapBase<int64> *hm)
   printf("\n%lf sec\n", timediff(before, after));  
 }
 
-int main()
+int main(int argc, char *argv[])
 {
   srand(time(NULL));
   for (int i = 0; i < NELEM; i++)
@@ -106,8 +106,14 @@ int main()
   testHMB(hm);
   delete hm;
 
-  int d = 2; // The number of Cuckoo tables
-  HashFunction **tabhArr = new HashFunction*[d];
+  int d;  // The number of Cuckoo tables
+  if (argc == 2) {
+    d = atoi(argv[2]);
+  }
+  else
+    d = 5;
+  
+  /*  HashFunction **tabhArr = new HashFunction*[d];
   HashFunction **mulhArr = new HashFunction*[d];
   for (int i = 0; i < d; ++i) {
     tabhArr[i] = new TabulationHash(HMSIZE);
@@ -121,6 +127,25 @@ int main()
 
   hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
   printf("***** Cuckoo with multiplication:\n");
+  testHMB(hm);
+  delete hm;
+  */
+  int smSize = 1.1 * HMSIZE / d;
+  
+  HashFunction **tabhSmallArr = new HashFunction*[d];
+  HashFunction **mulhSmallArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    tabhSmallArr[i] = new TabulationHash(smSize);
+    mulhSmallArr[i] = new MultiplicationHash(smSize);
+  }
+
+  hm = new CuckooHashing<int64>(smSize, tabhSmallArr, d);
+  printf("***** Cuckoo with small table and tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new CuckooHashing<int64>(smSize, mulhSmallArr, d);
+  printf("***** Cuckoo with small table and multiplication:\n");
   testHMB(hm);
   delete hm;
 
