@@ -175,16 +175,30 @@ int main(int argc, char *argv[])
   testHMB(hm);
   delete hm;
 
-  int d = 2; // The number of Cuckoo tables
-  HashFunction **tabhArr = new HashFunction*[d];
-
-  int d;  // The number of Cuckoo tables
+  int d = 5; // The number of Cuckoo tables
   if (argc == 2) {
     d = atoi(argv[2]);
   }
   else
     d = 5;
   
+  /*  HashFunction **tabhArr = new HashFunction*[d];
+  HashFunction **mulhArr = new HashFunction*[d];
+  for (int i = 0; i < d; ++i) {
+    tabhArr[i] = new TabulationHash(HMSIZE);
+    mulhArr[i] = new MultiplicationHash(HMSIZE);
+  }
+
+  hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
+  printf("***** Cuckoo with tabulation:\n");
+  testHMB(hm);
+  delete hm;
+
+  hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
+  printf("***** Cuckoo with multiplication:\n");
+  testHMB(hm);
+  delete hm;*/
+
   int smSize = 1.1 * HMSIZE / d;
   
   HashFunction **tabhSmallArr = new HashFunction*[d];

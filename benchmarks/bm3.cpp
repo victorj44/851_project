@@ -21,9 +21,9 @@
 #include "../cuckooHashing/cuckooHashing.h"
 #include "../hopscotch/hopscotch.h"
 
-const int64 NELEM = 1000*1000;
+const int64 HMSIZE = 1000*1000;
 const int64 BUCKETSIZE = 10000;
-const int64 HMSIZE = NELEM; // must be >= NELEM
+const int64 NELEM = 0.9*HMSIZE; // must be >= NELEM
 const int64 NREADS = 100;//each time frame ~ 1M reads
 
 int64 elems[NELEM]; //keys inserted
@@ -117,8 +117,7 @@ int main(int argc, char *argv[])
   testHMB(hm);
   delete hm;
 
-  int d = 2; // The number of Cuckoo tables
-  HashFunction **tabhArr = new HashFunction*[d];
+  int d; // The number of Cuckoo tables
   if (argc == 2) {
     d = atoi(argv[2]);
   }
@@ -142,7 +141,8 @@ int main(int argc, char *argv[])
   testHMB(hm);
   delete hm;
   */
-  int smSize = 1.1 * HMSIZE / d;
+  int smSize = HMSIZE / d;
+    
   HashFunction **tabhSmallArr = new HashFunction*[d];
   HashFunction **mulhSmallArr = new HashFunction*[d];
   for (int i = 0; i < d; ++i) {

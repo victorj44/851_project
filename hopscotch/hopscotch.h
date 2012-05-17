@@ -8,7 +8,7 @@ class HopscotchHash : public HashMapBase<T>
 {
  private:
   static const int64 EMPTY = (int64)-1;
-  static const int64 MAXH = 32;
+  static const int64 MAXH = 64;
   int64 size;
   HashFunction *hf;
   T *values;
@@ -107,6 +107,7 @@ class HopscotchHash : public HashMapBase<T>
 
     if (freepos >= size)
       {
+	//printf("Nowhere to put it...\n");
 	return false;
       }
 
