@@ -68,6 +68,7 @@ class QuadraticProbing : public HashMapBase<T>
   // bool get(string key, T &retValue);
   
   int64 getnprobes() { return nprobes; }
+  void print() { }
 };
 
 #endif // __QUADRATIC_PROBING__

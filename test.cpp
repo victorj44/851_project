@@ -30,8 +30,11 @@ int main()
       int64 value = rand();
       truth[key] = value;
       hm->put(key, value);
+      if (i % 6 == 0)
+	printf("\n");
     }
 
+  hm->print();
   printf("reading the values\n");
   for (map<int64, int64>::iterator I = truth.begin(); I != truth.end(); I++)
     {
@@ -48,7 +51,5 @@ int main()
     }
 
   printf("everything ok\n");
-
-
   return 0;
 }

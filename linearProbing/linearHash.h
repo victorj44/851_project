@@ -68,6 +68,7 @@ class LinearHash : public HashMapBase<T>
   }
   
   int64 getnprobes() { return nprobes; }
+  void print() { }
 };
 
 #endif //__LINEAR_PROBING_HASH__

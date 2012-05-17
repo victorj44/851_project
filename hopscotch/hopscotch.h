@@ -13,12 +13,11 @@ class HopscotchHash : public HashMapBase<T>
   HashFunction *hf;
   T *values;
   int64 *keys;
-  int32 *used;
   int64 nprobes;
 
-  inline bool getBit(int64 pos, int shift) { return (used[pos] >> shift) & 1;}
-  inline void setBit(int64 pos, int shift) { used[pos] |= 1 << shift; }
-  inline void unsetBit(int64 pos, int shift) { used[pos] &= ~(1 << shift); }
+  //inline bool getBit(int64 pos, int shift) { return (used[pos] >> shift) & 1;}
+  //inline void setBit(int64 pos, int shift) { used[pos] |= 1 << shift; }
+  //inline void unsetBit(int64 pos, int shift) { used[pos] &= ~(1 << shift); }
 
   //shifts everything in the hash table
   //assumes that keys[inith + dist] is empty
@@ -47,7 +46,7 @@ class HopscotchHash : public HashMapBase<T>
 		//unsetBit(tmphash, curpos + i - tmphash);
 		//setBit(tmphash, curpos + MAXH - tmphash);
 
-		dist -= MAXH - i + 1;
+		dist -= MAXH - i - 1;
 
 		done = true;
 	      }
@@ -60,7 +59,7 @@ class HopscotchHash : public HashMapBase<T>
 	    return 0;
 	  }
       }
-    return inith + dist;
+    return (inith + dist)%size;
   }
 
 
@@ -70,9 +69,7 @@ class HopscotchHash : public HashMapBase<T>
     nprobes = 0;
     values = new T[size];
     keys = new int64[size];
-    used = new int32[size];
     memset(keys, -1, sizeof(keys) * size); //initializes to EMPTY
-    memset(used, 0, sizeof(used) * size);
   }
   
   ~HopscotchHash()
@@ -107,17 +104,12 @@ class HopscotchHash : public HashMapBase<T>
 
     keys[freepos] = key;
     values[freepos] = value;
-    //if (h > freepos)
-    //setBit(h, size + freepos - h);
-    //else
-    //setBit(h, freepos - h); //hm... this needs to be mod size?
-    printf("put key = %lld, hash %lld, freepos %lld\n", key, h, freepos);
+    printf("key = %llu, h = %llu, fp = %llu \t", key, h, freepos);
   }
 
   bool get(int64 key, T &retValue)
   {
     bool ret = false;
-
     int64 h = hf->hash(key);
     for (int64 i = 0; i < MAXH; i++)
       {
@@ -132,11 +124,30 @@ class HopscotchHash : public HashMapBase<T>
 	if (h >= size)
 	  h -= size;
       }
+    if (ret == false)
+      {
+	printf("break here: key = %llu, h = %llu\n", key, hf->hash(key));
+      }
 
     return ret;
   }
 
   int64 getnprobes() { return nprobes; }
+
+  void print()
+  {
+    printf("\n");
+    for (int i = 0; i < size; i += 10)
+      {
+	printf("%d: ", i);
+	for (int j = 0; j < 10; j++)
+	  if (keys[i + j] == EMPTY)
+	    printf("E ");
+	  else
+	    printf("%llu ", keys[i + j]);
+	printf("\n");
+      }
+  }
 
 };
 
