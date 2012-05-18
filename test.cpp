@@ -15,7 +15,6 @@ const int testSize = 80;
 int main()
 {
   HashFunction *hf = new TabulationHash(testSize);
-  HashFunction *hf2 = new MultiplicationHash(testSize);
 
   //key = {string, int64}; value = <T>
   //super not intuitive

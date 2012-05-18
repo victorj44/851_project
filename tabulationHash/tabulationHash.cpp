@@ -1,3 +1,4 @@
+
 #include "tabulationHash.h"
 #include <ctime>
 #include <cstdlib>
@@ -21,7 +22,7 @@ int64 TabulationHash::hash(int64 key)
   int64 ret = 0;
   for (int i = 0; i < 8; i++)
     {
-      ret ^= T[i][key % (1<<8)];
+      ret ^= T[i][key & 0xFF];
       key >>= 8;
     }
   return ret % size;
@@ -31,7 +32,7 @@ int64 TabulationHash::hash(string key)
 {
   int64 ret = 0;
   for (unsigned int i = 0; i < key.length(); i++)
-    ret ^= T[i%8][(int)key[i]];
+    ret ^= T[i & 0x7][(int)key[i]];
 
   return ret % size;
 }

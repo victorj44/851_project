@@ -1,3 +1,4 @@
+/* Obsolete: Use bm1_individual to test cache for individual functions. */
 /* **************************************
  * benchmark 1 - pure reads
  * 10^6 elements in hash maps

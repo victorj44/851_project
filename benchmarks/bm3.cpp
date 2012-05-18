@@ -1,19 +1,20 @@
 /* **************************************
- * benchmark 2 - reads running time vs. load
+ * benchmark 3 - reads running time vs. load
  * 10^6 elements in hash maps
  * 10^8 gets per hash map
  * - linear hashing w/ tabulation
  * - linear hashing w/ mult.hash.
  * - quadr hashing w/ tabulation
  * - quadr hashing w/ mult.hash.
+ * - hopscotch w/ tabulation
+ * - hopscotch w/ mult. hash.
+ * - cuckoo w/ tabulation
+ * - cuckoo w/ mult. hash.
  */
 #include <cstdio>
 #include <sys/time.h>
 #include <unistd.h>
 #include <ctime>
-#include <tr1/unordered_map>
-//#include <boost/unordered_map.hpp>
-#include <ext/hash_map>
 #include "../tabulationHash/tabulationHash.h"
 #include "../multiplicationHash/multiplicationHash.h"
 #include "../linearProbing/linearHash.h"
@@ -21,9 +22,9 @@
 #include "../cuckooHashing/cuckooHashing.h"
 #include "../hopscotch/hopscotch.h"
 
-const int64 HMSIZE = 1000*1000;
+const int64 HMSIZE = 1000*1000; //hash map size
 const int64 BUCKETSIZE = 10000;
-const int64 NELEM = 0.9*HMSIZE; // must be >= NELEM
+const int64 NELEM = 0.9*HMSIZE; // Load factor is 90%
 const int64 NREADS = 100;//each time frame ~ 1M reads
 
 int64 elems[NELEM]; //keys inserted
@@ -37,7 +38,7 @@ double timediff(struct timeval before, struct timeval after)
 
 void testHMB(HashMapBase<int64> *hm)
 {
-    struct timeval before, after;
+  struct timeval before, after;
 
   //start timer;
   gettimeofday(&before, NULL);
@@ -45,31 +46,30 @@ void testHMB(HashMapBase<int64> *hm)
   int64 value = 123;
 
   for (int round = 1; round < NELEM/BUCKETSIZE; round++)
+  {
+    int sz = BUCKETSIZE * round;
+    for (int i = 0; i < BUCKETSIZE; i++)
+      hm->put(elems[sz - i - 1], value);
+    
+    //random permutate reads
+    for (int i = 0; i < sz; i++)
+      perm[i] = elems[rand() % sz];
+    
+    gettimeofday(&before, NULL);
+    //do NREADS * BUCKETSIZE reads
+    for (int j = 0; j < NREADS; j++)
     {
-      int sz = BUCKETSIZE * round;
+      double ncalls = 0;
       for (int i = 0; i < BUCKETSIZE; i++)
-	hm->put(elems[sz - i - 1], value);
-
-      //random permutate reads
-      for (int i = 0; i < sz; i++)
-	perm[i] = elems[rand() % sz];
-
-      gettimeofday(&before, NULL);
-      //do NREADS * BUCKETSIZE reads
-      for (int j = 0; j < NREADS; j++)
-	{
-	  double ncalls = 0;
-	  for (int i = 0; i < BUCKETSIZE; i++)
-	    {
-	      hm->get(perm[i], value);
-	      ncalls++;
-	    }
-	}
-      gettimeofday(&after, NULL);
-
-      printf("%lf\n", timediff(before, after));
+      {
+	hm->get(perm[i], value);
+	ncalls++;
+      }
     }
-
+    gettimeofday(&after, NULL);
+    
+    printf("%lf\n", timediff(before, after));
+  }
   
   //finish timer;
   gettimeofday(&after, NULL);
@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
   for (int i = 0; i < NELEM; i++)
     perm[i] = elems[rand() % NELEM]; 
 
+  // Create a hash function
   HashFunction *tabh = new TabulationHash(HMSIZE);
   HashFunction *mulh = new MultiplicationHash(HMSIZE);
 
@@ -119,30 +120,14 @@ int main(int argc, char *argv[])
 
   int d; // The number of Cuckoo tables
   if (argc == 2) {
-    d = atoi(argv[2]);
+    d = atoi(argv[2]); // Take d from the command line if specified
   }
   else
     d = 5;
   
-  /*  HashFunction **tabhArr = new HashFunction*[d];
-  HashFunction **mulhArr = new HashFunction*[d];
-  for (int i = 0; i < d; ++i) {
-    tabhArr[i] = new TabulationHash(HMSIZE);
-    mulhArr[i] = new MultiplicationHash(HMSIZE);
-  }
+  int smSize = HMSIZE / d; // Scale the size of tables for Cuckoo
 
-  hm = new CuckooHashing<int64>(HMSIZE, tabhArr, d);
-  printf("***** Cuckoo with tabulation:\n");
-  testHMB(hm);
-  delete hm;
-
-  hm = new CuckooHashing<int64>(HMSIZE, mulhArr, d);
-  printf("***** Cuckoo with multiplication:\n");
-  testHMB(hm);
-  delete hm;
-  */
-  int smSize = HMSIZE / d;
-    
+  // We need an array of hash function   
   HashFunction **tabhSmallArr = new HashFunction*[d];
   HashFunction **mulhSmallArr = new HashFunction*[d];
   for (int i = 0; i < d; ++i) {
