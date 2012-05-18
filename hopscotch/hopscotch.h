@@ -15,53 +15,46 @@ class HopscotchHash : public HashMapBase<T>
   int64 *keys;
   int64 nprobes;
 
-  //inline bool getBit(int64 pos, int shift) { return (used[pos] >> shift) & 1;}
-  //inline void setBit(int64 pos, int shift) { used[pos] |= 1 << shift; }
-  //inline void unsetBit(int64 pos, int shift) { used[pos] &= ~(1 << shift); }
-
   //shifts everything in the hash table
   //assumes that keys[inith + dist] is empty
   //makes space somewhere in [inith, inith + H - 1]
   //assumes size > H
   int64 reshuffle(int64 inith, int64 dist)
   {
-    int64 now;
     while (dist >= MAXH)
+    {
+      int64 curpos = inith + dist - MAXH + 1;
+      bool done = false;
+      
+      for (int64 i = 0; i < MAXH - 1 && !done; i++)
       {
-	int64 curpos = inith + dist - MAXH + 1;
-	bool done = false;
-
-	for (int64 i = 0; i < MAXH - 1 && !done; i++)
+	int64 tmphash = hf->hash(keys[(curpos + i)%size]);
+	//keys[curpos + i] hashed somewhere between [curpos + 1, curpos + H]
+	//curpos + H is empty, so swap these two and mark the appropriate pointers
+	if (tmphash >= curpos)
+	{
+	  keys[ (curpos + MAXH - 1)%size ] = keys[ (curpos + i)%size ];
+	  values[ (curpos + MAXH - 1)%size ] = values[ (curpos + i)%size ];
+	  keys[ (curpos + i)%size ] = EMPTY;
+	  
+	  dist -= MAXH - i - 1;
+	  if (MAXH - i - 1 == 0)
 	  {
-	    int64 tmphash = hf->hash(keys[(curpos + i)%size]);
-	    //keys[curpos + i] hashed somewhere between [curpos + 1, curpos + H]
-	    //curpos + H is empty, so swap these two and mark the appropriate pointers
-	    //does everything here have to be mod size? !! make sure it's correct !!
-	    if (tmphash >= curpos)
-	      {
-		keys[ (curpos + MAXH - 1)%size ] = keys[ (curpos + i)%size ];
-		values[ (curpos + MAXH - 1)%size ] = values[ (curpos + i)%size ];
-		keys[ (curpos + i)%size ] = EMPTY;
-
-		dist -= MAXH - i - 1;
-		if (MAXH - i - 1 == 0)
-		  {
-		    printf("!!!!!!!!! NOT MOVING\n");
-		  }
-
-		done = true;
-	      }
+	    printf("!!!!!!!!! NOT MOVING\n");
 	  }
-	
-	//this should not happen unless the table is entirely full
-	if (!done)
-	  {
-	    return EMPTY;
-	  }
+	  
+	  done = true;
+	}
       }
-    return (inith + dist)%size;
+	
+      //this should not happen unless the table is entirely full
+      if (!done)
+      {
+	return EMPTY;
+      }
+    }
+    return (inith + dist) % size;
   }
-
 
  public:
  HopscotchHash(int64 size, HashFunction *hf) : size(size), hf(hf)
@@ -98,7 +91,7 @@ class HopscotchHash : public HashMapBase<T>
     //table full, can't put anything in
     if (dist >= size)
       {
-	//printf("FULL!\n");
+	// Table full
 	return false;
       }
 
@@ -107,13 +100,12 @@ class HopscotchHash : public HashMapBase<T>
 
     if (freepos >= size)
       {
-	//printf("Nowhere to put it...\n");
+	// Can't get an empty slot near
 	return false;
       }
 
     keys[freepos] = key;
     values[freepos] = value;
-    //printf("key = %llu, h = %llu, fp = %llu \t", key, h, freepos);
     return true;
   }
 
@@ -122,24 +114,20 @@ class HopscotchHash : public HashMapBase<T>
     bool ret = false;
     int64 h = hf->hash(key);
     for (int64 i = 0; i < MAXH; i++)
+    {
+      nprobes++;
+      if (keys[h] == key)
       {
-	nprobes++;
-	if (keys[h] == key)
-	  {
-	    retValue = values[h];
-	    ret = true;
-	    break;
-	  }
-
-	h++;
-	if (h >= size)
-	  h -= size;
-      }
-    if (ret == false)
-      {
-	printf("break here: key = %llu, h = %llu\n", key, hf->hash(key));
+	retValue = values[h];
+	ret = true;
+	break;
       }
 
+      h++;
+      if (h >= size)
+	h -= size;
+    }
+    
     return ret;
   }
 
@@ -149,17 +137,17 @@ class HopscotchHash : public HashMapBase<T>
   {
     printf("\n");
     for (int i = 0; i < size; i += 10)
-      {
-	printf("%d: ", i);
-	for (int j = 0; j < 10; j++)
-	  if (keys[i + j] == EMPTY)
-	    printf("E ");
-	  else
-	    printf("%llu ", keys[i + j]);
-	printf("\n");
-      }
+    {
+      printf("%d: ", i);
+      for (int j = 0; j < 10; j++)
+	if (keys[i + j] == EMPTY)
+	  printf("E ");
+	else
+	  printf("%llu ", keys[i + j]);
+      printf("\n");
+    }
   }
 
 };
 
-#endif __HOPSCOTCH_HASH_H__
+#endif //__HOPSCOTCH_HASH_H__

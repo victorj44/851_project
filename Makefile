@@ -1,7 +1,7 @@
 #makefile for our hashmaps
 
 CC=g++
-CFLAGS= -g -Wall
+CFLAGS= -O2 -Wall
 LDFLAGS=
 
 all:
